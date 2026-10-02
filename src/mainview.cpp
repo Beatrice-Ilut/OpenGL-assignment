@@ -1,6 +1,7 @@
 #include "mainview.h"
 
 #include <QDateTime>
+#include <QQuaternion>
 
 /**
  * @brief MainView::MainView Constructs a new main view.

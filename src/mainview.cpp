@@ -1,4 +1,5 @@
 #include "mainview.h"
+#include "shadingmode.h"
 
 #include <QDateTime>
 #include <QQuaternion>
@@ -76,12 +77,27 @@ void MainView::initializeGL() {
  * vertex and fragment shader.
  */
 void MainView::createShaderProgram() {
-  // Create shader program
-  shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                        ":/shaders/vertshader.glsl");
-  shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                        ":/shaders/fragshader.glsl");
-  shaderProgram.link();
+  
+  // Create gouraud shader program
+  shaderProgram[GOURAUD].addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader_gouraud.glsl");
+  shaderProgram[GOURAUD].addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader_gouraud.glsl");
+  shaderProgram[GOURAUD].link();
+  
+  // Create normal shader program
+  shaderProgram[NORMAL].addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader_normal.glsl");
+  shaderProgram[NORMAL].addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader_normal.glsl");
+  shaderProgram[NORMAL].link();
+
+  // Create phong shader program
+  shaderProgram[PHONG].addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader_phong.glsl");
+  shaderProgram[PHONG].addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader_phong.glsl");
+  shaderProgram[PHONG].link();
 }
 
 /**
@@ -142,20 +158,20 @@ void MainView::paintGL() {
   // Clear the screen before rendering
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  shaderProgram.bind();
+  shaderProgram[type].bind();
 
   // Update the uniform values. Note that it is better to only do this when the
   // matrices change, but for the sake of simplicity this was not done.
-  shaderProgram.setUniformValue("modelViewTransform", meshTransform);
-  shaderProgram.setUniformValue("projectionTransform", projectionTransform);
+  shaderProgram[type].setUniformValue("modelViewTransform", meshTransform);
+  shaderProgram[type].setUniformValue("projectionTransform", projectionTransform);
 
   // Setting the values of the normalTransform in the vertex shader to our normal matrix.
-  shaderProgram.setUniformValue("normalTransform", normalMatrix);
+  shaderProgram[type].setUniformValue("normalTransform", normalMatrix);
 
   glBindVertexArray(meshVAO);
   glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
-  shaderProgram.release();
+  shaderProgram[type].release();
 }
 
 /**
@@ -230,7 +246,10 @@ void MainView::setScale(float newScale) {
 
 void MainView::setShadingMode(ShadingMode shading) {
   qDebug() << "Changed shading to" << shading;
-  Q_UNIMPLEMENTED();
+
+  // Set the type to the current shading and then update the view.
+  type = shading;
+  update();
 }
 
 /**

@@ -57,12 +57,16 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   void updateProjectionTransform();
   void updateModelTransforms();
   QVector<quint8> imageToBytes(const QImage &image);
-  
 
   QOpenGLDebugLogger debugLogger;
   QTimer timer;  // timer used for animation
 
-  QOpenGLShaderProgram shaderProgram;
+  // Shading mode index used to access the array.
+  // Set to the normal shader by default.
+  ShadingMode type = NORMAL; 
+
+  // Array for all 3 shaders instead of a single fixed shader.
+  QOpenGLShaderProgram shaderProgram[3];
 
   // Mesh values
   GLuint meshVAO;

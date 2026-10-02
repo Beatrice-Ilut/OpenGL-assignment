@@ -5,6 +5,6 @@
  * @brief Shading mode that specifies the different available shading modes:
  * Phong, Normal and Gouraud shading.
  */
-enum ShadingMode { PHONG = 0, NORMAL, GOURAUD };
+enum ShadingMode { NORMAL, GOURAUD, PHONG };
 
 #endif  // SHADINGMODE_H

@@ -4,14 +4,14 @@
 #include <QVector3D>
 
 /**
- * @brief Represents a single vertex with coordinates and an rgb color.
+ * @brief Represents a single vertex with coordinates and xyz values for the normal.
  */
 struct Vertex {
   QVector3D coords;
-  QVector3D color;
+  QVector3D normal;
 
   Vertex() = default;
-  Vertex(QVector3D coords, QVector3D color) : coords(coords), color(color) {}
+  Vertex(QVector3D coords, QVector3D normal) : coords(coords), normal(normal) {}
 };
 
 #endif  // VERTEX_H

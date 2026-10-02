@@ -10,6 +10,7 @@
 #include <QOpenGLWidget>
 #include <QTimer>
 #include <QVector3D>
+#include <qgenericmatrix.h>
 
 #include "model.h"
 #include "shadingmode.h"
@@ -56,6 +57,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   void updateProjectionTransform();
   void updateModelTransforms();
   QVector<quint8> imageToBytes(const QImage &image);
+  
 
   QOpenGLDebugLogger debugLogger;
   QTimer timer;  // timer used for animation
@@ -64,7 +66,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
   // Mesh values
   GLuint meshVAO;
-  GLuint meshPositionVBO, meshColorVBO;
+  GLuint meshPositionVBO, meshNormalVBO;
   GLuint meshSize;
   QMatrix4x4 meshTransform;
 
@@ -72,6 +74,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   float scale = 1.0F;
   QVector3D rotation;
   QMatrix4x4 projectionTransform;
+  QMatrix3x3 normalMatrix;
 };
 
 #endif  // MAINVIEW_H

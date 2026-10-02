@@ -92,7 +92,7 @@ void MainView::createShaderProgram() {
 void MainView::loadMesh(const QString &filename) {
   Model model(filename);
   QVector<QVector3D> meshCoords = model.getCoords();
-  QVector<QVector3D> meshColors = model.getRandomColors();
+  QVector<QVector3D> meshNormals = model.getNormals();
 
   meshSize = meshCoords.size();
 
@@ -102,7 +102,7 @@ void MainView::loadMesh(const QString &filename) {
 
   // Generate VBO
   glGenBuffers(1, &meshPositionVBO);
-  glGenBuffers(1, &meshColorVBO);
+  glGenBuffers(1, &meshNormalVBO);
 
   // Copy the vertex coordinates into the position VBO
   glBindBuffer(GL_ARRAY_BUFFER, meshPositionVBO);
@@ -115,12 +115,12 @@ void MainView::loadMesh(const QString &filename) {
                         reinterpret_cast<GLvoid *>(0));
   glEnableVertexAttribArray(0);
 
-  // Copy the colors into the color VBO
-  glBindBuffer(GL_ARRAY_BUFFER, meshColorVBO);
-  glBufferData(GL_ARRAY_BUFFER, meshColors.size() * sizeof(QVector3D),
-               meshColors.data(), GL_STATIC_DRAW);
+  // Copy the normals into the normal VBO
+  glBindBuffer(GL_ARRAY_BUFFER, meshNormalVBO);
+  glBufferData(GL_ARRAY_BUFFER, meshNormals.size() * sizeof(QVector3D),
+               meshNormals.data(), GL_STATIC_DRAW);
 
-  // Set color values to location 1
+  // Set normal values to location 1
   // Note: glVertexAttribPointer implicitly reference the VBO currently bound to GL_ARRAY_BUFFER
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D),
                         reinterpret_cast<GLvoid *>(0));
@@ -148,6 +148,9 @@ void MainView::paintGL() {
   // matrices change, but for the sake of simplicity this was not done.
   shaderProgram.setUniformValue("modelViewTransform", meshTransform);
   shaderProgram.setUniformValue("projectionTransform", projectionTransform);
+
+  // Setting the values of the normalTransform in the vertex shader to our normal matrix.
+  shaderProgram.setUniformValue("normalTransform", normalMatrix);
 
   glBindVertexArray(meshVAO);
   glDrawArrays(GL_TRIANGLES, 0, meshSize);
@@ -187,6 +190,10 @@ void MainView::updateModelTransforms() {
   meshTransform.translate(0.0F, 0.0F, -10.0F);
   meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
   meshTransform.scale(scale);
+
+  // Get the normal matrix from the updated model transformation matrix.
+  normalMatrix = meshTransform.normalMatrix();
+
   update();
 }
 
@@ -195,7 +202,7 @@ void MainView::updateModelTransforms() {
  */
 void MainView::destroyModelBuffers() {
   glDeleteBuffers(1, &meshPositionVBO);
-  glDeleteBuffers(1, &meshColorVBO);
+  glDeleteBuffers(1, &meshNormalVBO);
   glDeleteVertexArrays(1, &meshVAO);
 }
 

@@ -5,7 +5,7 @@
 
 // Specify the inputs to the fragment shader
 // These must have the same type and name!
-in vec3 vertNormal;
+in vec3 color;
 
 // Specify the Uniforms of the fragment shaders
 // uniform vec3 lightPosition; // for example
@@ -16,7 +16,6 @@ out vec4 fColor;
 
 void main() {
 
-    // Set shader output to color blue for now.
-    vec3 nVertNormal = normalize(vertNormal);
-    fColor = vec4(0.0,0.0,1.0, 1.0F);
+    // Set fragment shader output to the computed color in the vertex shader.
+    fColor = vec4(color, 1.0F);
 }

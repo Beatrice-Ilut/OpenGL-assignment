@@ -1,0 +1,5 @@
+C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/OpenGL_2.dir
+C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/edit_cache.dir
+C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/rebuild_cache.dir
+C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/OpenGL_2_autogen_timestamp_deps.dir
+C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/OpenGL_2_autogen.dir

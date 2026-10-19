@@ -3,7 +3,9 @@
         <file>textures/cat_diff.png</file>
         <file>textures/cat_norm.png</file>
         <file>textures/cat_spec.png</file>
+        <file>textures/meijster.png</file>
         <file>models/cat.obj</file>
+        <file>models/m.obj</file>
         <file>shaders/fragshader_normal.glsl</file>
         <file>shaders/vertshader_gouraud.glsl</file>
         <file>shaders/fragshader_gouraud.glsl</file>

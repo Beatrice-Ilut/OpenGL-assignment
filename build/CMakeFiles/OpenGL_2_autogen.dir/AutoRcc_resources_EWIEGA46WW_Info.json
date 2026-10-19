@@ -1,0 +1,36 @@
+{
+	"BUILD_DIR" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/build/OpenGL_2_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/src",
+	"CMAKE_SOURCE_DIR" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/src",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "MinGW Makefiles",
+	"INCLUDE_DIR" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/build/OpenGL_2_autogen/include",
+	"INPUTS" : 
+	[
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/models/m.obj",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/models/cat.obj",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/shaders/fragshader_gouraud.glsl",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/shaders/fragshader_phong.glsl",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/shaders/vertshader_phong.glsl",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/shaders/vertshader_gouraud.glsl",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/shaders/fragshader_normal.glsl",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/shaders/vertshader_normal.glsl",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/textures/cat_norm.png",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/textures/cat_spec.png",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/textures/cat_diff.png",
+		"C:/Users/Beatrice/Desktop/group-1_opengl-2/src/textures/meijster.png"
+	],
+	"LOCK_FILE" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/OpenGL_2_autogen.dir/AutoRcc_resources_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "--no-zstd", "-name", "resources" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "C:/Qt/6.11.2/mingw_64/bin/rcc.exe",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/build/CMakeFiles/OpenGL_2_autogen.dir/AutoRcc_resources_EWIEGA46WW_Used.txt",
+	"SOURCE" : "C:/Users/Beatrice/Desktop/group-1_opengl-2/src/resources.qrc",
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

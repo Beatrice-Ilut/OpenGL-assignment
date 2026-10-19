@@ -70,8 +70,10 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
   // Mesh values
   GLuint meshVAO;
-  GLuint meshPositionVBO, meshNormalVBO;
+  GLuint meshPositionVBO, meshNormalVBO, meshTextureVBO;
   GLuint meshSize;
+  GLuint meshTexture;
+  GLint textureLocation;
   QMatrix4x4 meshTransform;
 
   // Transforms

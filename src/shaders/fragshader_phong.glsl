@@ -7,6 +7,9 @@
 // These must have the same type and name!
 in vec3 vertNormal;
 in vec3 P;
+in vec2 texCoord;
+
+uniform sampler2D textureSampler;
 
 // Specify material properties
 const float ka = 0.4;
@@ -24,6 +27,7 @@ const vec3 lightColor = vec3(1.0,1.0,1.0);
 out vec4 fColor;
 
 void main() {
+    vec3 texColor = texture(textureSampler, texCoord).rgb;
 
     // Get the necessary directions for the illumination components
     vec3 N = normalize(vertNormal);
@@ -32,10 +36,10 @@ void main() {
     vec3 R = normalize(reflect(-L, N));
 
     // Illumination components computation 
-    vec3 ambientComp = ka * materialColor;
-    vec3 diffuseComp = kd * max(0.0, dot(N, L)) * materialColor * lightColor;
+    vec3 ambientComp = ka * materialColor * texColor.rgb;
+    vec3 diffuseComp = kd * max(0.0, dot(N, L)) * texColor.rgb * lightColor;
     vec3 specularComp = ks * pow(max(0.0, dot(R,V)), specularExp) * lightColor;
 
     // Set shader output to the computed color
-    fColor = vec4(ambientComp + diffuseComp + specularComp,1.0);
+    fColor = vec4(ambientComp + diffuseComp + specularComp, 1.0);
 }

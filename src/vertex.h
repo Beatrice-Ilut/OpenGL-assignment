@@ -9,9 +9,11 @@
 struct Vertex {
   QVector3D coords;
   QVector3D normal;
+  QVector2D texCoord;
 
   Vertex() = default;
-  Vertex(QVector3D coords, QVector3D normal) : coords(coords), normal(normal) {}
+  Vertex(QVector3D coords, QVector3D normal, QVector2D texCoord = QVector2D())
+      : coords(coords), normal(normal), texCoord(texCoord) {}
 };
 
 #endif  // VERTEX_H

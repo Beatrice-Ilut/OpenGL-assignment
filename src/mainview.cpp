@@ -65,7 +65,7 @@ void MainView::initializeGL() {
   glClearColor(0.37f, 0.42f, 0.45f, 0.0f);
 
   createShaderProgram();
-  loadMesh(":/models/cat.obj");
+  loadMesh(":/models/m.obj");
 
   // Initialize transformations
   updateProjectionTransform();
@@ -98,6 +98,8 @@ void MainView::createShaderProgram() {
   shaderProgram[PHONG].addShaderFromSourceFile(QOpenGLShader::Fragment,
                                         ":/shaders/fragshader_phong.glsl");
   shaderProgram[PHONG].link();
+
+  textureLocation = shaderProgram[PHONG].uniformLocation("textureSampler");
 }
 
 /**
@@ -109,8 +111,27 @@ void MainView::loadMesh(const QString &filename) {
   Model model(filename);
   QVector<QVector3D> meshCoords = model.getCoords();
   QVector<QVector3D> meshNormals = model.getNormals();
+  QVector<QVector2D> meshTexCoords = model.getTextureCoords();
 
   meshSize = meshCoords.size();
+
+  QImage textureImage(":/textures/meijster.png");
+  textureImage = textureImage.convertToFormat(QImage::Format_RGBA8888);
+  //convert image to bytes so that it can be used as a texture in the shader
+  QVector<quint8> textureData = imageToBytes(textureImage);
+
+  // Create a texture object and bind it to the texture unit
+  glGenTextures(1, &meshTexture);
+  glBindTexture(GL_TEXTURE_2D, meshTexture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, textureImage.width(),
+               textureImage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+               textureData.data());
+  glGenerateMipmap(GL_TEXTURE_2D);
 
   // Generate VAO
   glGenVertexArrays(1, &meshVAO);
@@ -119,6 +140,7 @@ void MainView::loadMesh(const QString &filename) {
   // Generate VBO
   glGenBuffers(1, &meshPositionVBO);
   glGenBuffers(1, &meshNormalVBO);
+  glGenBuffers(1, &meshTextureVBO);
 
   // Copy the vertex coordinates into the position VBO
   glBindBuffer(GL_ARRAY_BUFFER, meshPositionVBO);
@@ -141,6 +163,16 @@ void MainView::loadMesh(const QString &filename) {
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D),
                         reinterpret_cast<GLvoid *>(0));
   glEnableVertexAttribArray(1);
+
+  // Copy the texture coordinates into the texture VBO
+  glBindBuffer(GL_ARRAY_BUFFER, meshTextureVBO);
+  glBufferData(GL_ARRAY_BUFFER, meshTexCoords.size() * sizeof(QVector2D),
+               meshTexCoords.data(), GL_STATIC_DRAW);
+
+  // Set texture coordinates to location 2
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(QVector2D),
+                        reinterpret_cast<GLvoid *>(0));
+  glEnableVertexAttribArray(2);
 
   // Generally good practice to unbind the buffers to prevent anything after
   // this from accidentally modifying it.
@@ -167,6 +199,12 @@ void MainView::paintGL() {
 
   // Setting the values of the normalTransform in the vertex shader to our normal matrix.
   shaderProgram[type].setUniformValue("normalTransform", normalMatrix);
+
+  if (type == PHONG && textureLocation != -1) {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, meshTexture);
+    shaderProgram[type].setUniformValue(textureLocation, 0);
+  }
 
   glBindVertexArray(meshVAO);
   glDrawArrays(GL_TRIANGLES, 0, meshSize);
@@ -217,8 +255,13 @@ void MainView::updateModelTransforms() {
  * @brief MainView::destroyModelBuffers Cleans up the memory used by OpenGL.
  */
 void MainView::destroyModelBuffers() {
+  //delete texture
+  glDeleteTextures(1, &meshTexture);
+
+  //delete buffers and vertex array
   glDeleteBuffers(1, &meshPositionVBO);
   glDeleteBuffers(1, &meshNormalVBO);
+  glDeleteBuffers(1, &meshTextureVBO);
   glDeleteVertexArrays(1, &meshVAO);
 }
 
